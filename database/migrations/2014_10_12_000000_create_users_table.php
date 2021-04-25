@@ -18,8 +18,17 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('no_hp');
             $table->string('password');
+            $table->enum('jenis_kelamin',['l','p']);
+            $table->string('berkas_foto');
+            $table->string('berkas_ktp');
+            $table->string('berkas_kk');
+            $table->string('berkas_buku_tabungan');
             $table->rememberToken();
+            $table->foreignId('current_team_id')->nullable();
+            $table->text('profile_photo_path')->nullable();
+            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }
