@@ -15,15 +15,19 @@ class CreateWagesTable extends Migration
     {
         Schema::create('wages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->string('nik');
-            $table->dateTime('tgl_lahir');
+            $table->foreignId('user_id');   
+            $table->string('nik');            
+            $table->string('tempat_lahir');
+            $table->dateTime('tgl_lahir');         
             $table->text('lokasi_bekerja');
             $table->string('pekerjaan');
             $table->string('jam_kerja');
-            $table->integer('penghasilan');
-            $table->string('program');
-            $table->string('periode_pembayaran')->nullable();
+            $table->integer('penghasilan');            
+            $table->string('periode_pembayaran');
+            $table->string('berkas_foto');
+            $table->string('berkas_ktp');
+            $table->string('berkas_kk');
+            $table->string('berkas_buku_tabungan');
             $table->timestamps();
         });
     }

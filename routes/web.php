@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,3 +21,10 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+Route::group(['middleware' => 'auth'], function () {
+    // Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
+    Route::group(['middleware' => ['role_or_permission:admin']], function () {
+        Route::resource('kelola-peserta', UserController::class);        
+    });    
+});

@@ -27,7 +27,7 @@ class CreateConstructionsTable extends Migration
             $table->string('no_spk');
             $table->string('dokumen_spk');
             $table->integer('masa_kontrak');
-            $table->integer('masa_pemeliharaan');
+            $table->dateTime('masa_pemeliharaan')->nullable();
             $table->integer('total_pekerja');
             $table->string('cara_pembayaran');
             $table->timestamps();
