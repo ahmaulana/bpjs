@@ -166,7 +166,7 @@
                             <option value="">Pilih program...</option>
                             <option value="jkk jkm" @if (old('program_bpu')=='jkk jkm' ) selected="selected" @endif>Jaminan Kecelakaan Kerja (JKK) dan Jaminan Kematian (JKM)</option>
                             <option value="jkk jht" @if (old('program_bpu')=='jkk jht' ) selected="selected" @endif>Jaminan Kecelakaan Kerja (JKK) dan Jaminan Hari Tua (JHT)</option>
-                            <option value="jkk jkm jht" @if (old('program_bpu')=='jkk jkm jht' ) selected="selected" @endif>Jaminan Kecelakaan Kerja (JKK), Kaminan Kematian (JKM), Jaminan Hari Tua (JHT)</option>
+                            <option value="jkk jkm jht" @if (old('program_bpu')=='jkk jkm jht' ) selected="selected" @endif>Jaminan Kecelakaan Kerja (JKK), Jaminan Kematian (JKM), Jaminan Hari Tua (JHT)</option>
                         </select>
                     </div>
 

@@ -1,6 +1,9 @@
 <?php
 
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\admin\HomeController;
+use App\Http\Controllers\admin\NewUserController;
+use App\Http\Controllers\user\HomeController as UserHomeController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,13 +21,29 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/redirect', function () {    
+
+    if (User::findOrFail(auth()->user()->id)->hasRole(['Admin', 'admin'])) {
+        return redirect()->route('admin.home');
+    } else {
+        return redirect()->route('user.home');
+    }
+})->name('redirect');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
 Route::group(['middleware' => 'auth'], function () {
-    // Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-    Route::group(['middleware' => ['role_or_permission:admin']], function () {
-        Route::resource('kelola-peserta', UserController::class);        
-    });    
+
+    Route::middleware(['role_or_permission:admin'])->prefix('admin')->group(function () {
+
+        Route::get('/home', [HomeController::class, 'index'])->name('admin.home');
+
+        Route::resource('peserta-baru', NewUserController::class);
+    });
+
+    Route::middleware(['user_verified', 'role_or_permission:user'])->group(function () {
+        Route::get('/home', [UserHomeController::class, 'index'])->name('user.home');
+    });
 });

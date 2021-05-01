@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
+use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class NewUserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +15,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('user.index');
+        return view('components.new-user.index');
     }
 
     /**
@@ -56,7 +58,15 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::findOrFail($id);
+        if($user->jenis_kepesertaan != 'jk'){
+            $user_table = 'wages';
+        } else {        
+            $user_table = 'constructions';
+        }
+        $data = User::join($user_table, 'users.id', 'user_id')->where('users.id', $id)->where('status',false)->first();
+        
+        return view('components.new-user.edit', compact(['data']));
     }
 
     /**
