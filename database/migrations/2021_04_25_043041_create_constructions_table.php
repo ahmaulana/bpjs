@@ -15,7 +15,7 @@ class CreateConstructionsTable extends Migration
     {
         Schema::create('constructions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('npp');
             $table->string('nama_proyek');
             $table->text('alamat_proyek');

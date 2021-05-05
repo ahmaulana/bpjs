@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\NewUser;
 
 use App\Models\User;
+use App\Models\Wage;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -19,7 +21,7 @@ class Edit extends Component
     protected $messages;
 
     public function mount()
-    {
+    {                
         $this->user_id = $this->data->user_id;
         $this->jenis_kepesertaan = $this->data->jenis_kepesertaan;
         $this->nik = $this->data->nik;
@@ -101,7 +103,7 @@ class Edit extends Component
             $update = $this->validate();
 
             DB::transaction(function () use ($update) {
-                //Update Users Table
+                //Update Users Table                
                 $user = User::findOrFail($this->user_id);
                 $user->name = $update['name'];
                 $user->no_hp = $update['no_hp'];
@@ -110,9 +112,15 @@ class Edit extends Component
                 $user->status = true;
                 $user->save();
 
-                //Update Wages Table                
+                //Get Random Number
+                do {
+                    $no_kpj = mt_rand(10000000000, 99999999999);
+                } while (Wage::where('no_kpj', $no_kpj)->exists());
+
+                //Update Wages Table            
                 $user->wage()->update([
                     'nik' => $update['nik'],
+                    'no_kpj' => $no_kpj,
                     'tempat_lahir' => $update['tempat_lahir'],
                     'tgl_lahir' => $update['tgl_lahir'],
                     'lokasi_bekerja' => $update['lokasi_bekerja'],
@@ -123,7 +131,7 @@ class Edit extends Component
                 ]);
             });
             return redirect(route('peserta-baru.index'));
-        } else {            
+        } else {
             $this->rules = [
                 'npp' => ['required', 'numeric', 'digits:6', 'unique:constructions,npp,' . $this->data->id],
                 'name' => ['required'],
@@ -137,7 +145,7 @@ class Edit extends Component
                 'jenis_pemilik' => ['required'],
                 'nama_pemilik' => ['required'],
                 'npp_pelaksana' => ['required'],
-                'no_spk' => ['required'],                
+                'no_spk' => ['required'],
                 'masa_kontrak' => ['required'],
                 'total_pekerja' => ['required'],
                 'cara_pembayaran' => ['required'],
@@ -156,12 +164,12 @@ class Edit extends Component
                 'jenis_pemilik.required' => 'Jenis pemilik tidak boleh kosong!',
                 'nama_pemilik.required' => 'Nama pemilik tidak boleh kosong!',
                 'npp_pelaksana.required' => 'NPP pelaksana tidak boleh kosong!',
-                'no_spk.required' => 'No SPK tidak boleh kosong!',                
+                'no_spk.required' => 'No SPK tidak boleh kosong!',
                 'masa_kontrak.required' => 'Masa kontrak tidak boleh kosong!',
                 'total_pekerja.required' => 'Total pekerja tidak boleh kosong!',
                 'cara_pembayaran.required' => 'Cara pembayaran tidak boleh kosong!',
             ];
-            $update = $this->validate();            
+            $update = $this->validate();
 
             DB::transaction(function () use ($update) {
                 //Update Users Table
@@ -185,6 +193,7 @@ class Edit extends Component
                     'npp_pelaksana' => $update['npp_pelaksana'],
                     'no_spk' => $update['no_spk'],
                     'masa_kontrak' => $update['masa_kontrak'],
+                    'masa_pemeliharaan' => Carbon::now()->addYears($update['masa_kontrak']),
                     'total_pekerja' => $update['total_pekerja'],
                     'cara_pembayaran' => $update['cara_pembayaran'],
                 ]);

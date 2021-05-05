@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\NewUserController;
+use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\user\HomeController as UserHomeController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -41,9 +42,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/home', [HomeController::class, 'index'])->name('admin.home');
 
         Route::resource('peserta-baru', NewUserController::class);
+        Route::resource('klaim', ClaimController::class);
     });
 
     Route::middleware(['user_verified', 'role_or_permission:user'])->group(function () {
         Route::get('/home', [UserHomeController::class, 'index'])->name('user.home');
+        Route::get('/pengajuan-klaim', [ClaimController::class, 'form'])->name('user.claim.form');
     });
 });

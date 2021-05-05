@@ -2,13 +2,17 @@
 
 namespace App\Http\Livewire\NewUser;
 
+use App\Models\Construction;
 use App\Models\User;
+use App\Models\Wage;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Request;
 use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 use Mediconesystems\LivewireDatatables\NumberColumn;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class Index extends LivewireDatatable
 {
@@ -21,17 +25,17 @@ class Index extends LivewireDatatable
         } else {
 
             $user_table = 'wages';
-        }        
+        }
 
         return User::query()
             ->join($user_table, 'users.id', 'user_id')
-            ->where('users.id', '!=', '1')->where('status', false);
+            ->where('users.id', '!=', '1')->orderBy('status', 'ASC')->orderBy('users.id', 'ASC');
     }
 
     public function columns()
     {
         if (Request::has('user')) {
-            
+
             $columns = [
 
                 Column::name('users.id')
@@ -93,7 +97,7 @@ class Index extends LivewireDatatable
                 Column::name('users.id')
                     ->label('ID'),
 
-                Column::name('wage.nik')
+                Column::name('wages.nik')
                     ->label('NIK')
                     ->searchable(),
 
@@ -101,10 +105,10 @@ class Index extends LivewireDatatable
                     ->label('Nama')
                     ->searchable(),
 
-                Column::name('wage.tempat_lahir')
+                Column::name('wages.tempat_lahir')
                     ->label('Tempat Lahir'),
 
-                DateColumn::name('wage.tgl_lahir')
+                DateColumn::name('wages.tgl_lahir')
                     ->label('Tanggal Lahir'),
 
                 Column::callback(['jenis_kelamin'], function ($jk) {
@@ -153,5 +157,57 @@ class Index extends LivewireDatatable
         }
 
         return $columns;
+    }
+
+    public function delete($id)
+    {
+        $data = User::findOrFail($id);
+        if (!$data->status) {
+            if($data->jenis_kepesertaan != 'jk'){
+                $data->delete();
+            } else {
+                $data->delete();
+                return redirect(route('peserta-baru.index') . '?user=jasa-konstruksi');
+            }            
+        }
+    }
+
+    public function print($id)
+    {
+        $data = User::findOrFail($id);
+        if ($data->status) {
+            if ($data->jenis_kepesertaan != 'jk') {
+
+                // Nomor KPJ
+                $user = Wage::where('user_id', $data->id)->first();
+
+                $card = new TemplateProcessor(storage_path('app/templates/upah.docx'));
+                $card->setValues([
+                    'nama' => $data->name,
+                    'no' => $user->no_kpj,
+                    'tgl' => Carbon::now()->format('m-Y'),
+                ]);
+
+                $file_name = 'Kartu ' . $user->no_kpj . '.docx';
+                $card->saveAs($file_name);
+
+                return response()->download(public_path($file_name))->deleteFileAfterSend();
+            } else {
+                // Nomor NPP
+                $user = Construction::where('user_id', $data->id)->first();
+
+                $card = new TemplateProcessor(storage_path('app/templates/jasa-konstruksi.docx'));
+                $card->setValues([
+                    'nama' => $data->name,
+                    'no' => $user->npp_pelaksana,
+                    'alamat' => $user->alamat_proyek,
+                ]);
+
+                $file_name = 'Kartu ' . $user->npp_pelaksana . '.docx';
+                $card->saveAs($file_name);
+
+                return response()->download(public_path($file_name))->deleteFileAfterSend();
+            }
+        }
     }
 }

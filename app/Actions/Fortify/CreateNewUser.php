@@ -27,35 +27,35 @@ class CreateNewUser implements CreatesNewUsers
         //Store file
         if (isset($input['dokumen_spk'])) {
             $dokumen_spk = uniqid() . time() . '.' . $input['dokumen_spk']->getClientOriginalExtension();
-            $input['dokumen_spk']->storeAs('public/images', $dokumen_spk);
+            $input['dokumen_spk']->storeAs('berkas-peserta', $dokumen_spk);
         } else {
             $dokumen_spk = '';
         }        
 
         if (isset($input['berkas_foto'])) {
             $berkas_foto = uniqid() . time() . '.' . $input['berkas_foto']->getClientOriginalExtension();
-            $input['berkas_foto']->storeAs('public/images', $berkas_foto);
+            $input['berkas_foto']->storeAs('berkas-peserta', $berkas_foto);
         } else {
             $berkas_foto = '';
         }
 
         if (isset($input['berkas_ktp'])) {
             $berkas_ktp = uniqid() . time() . '.' . $input['berkas_ktp']->getClientOriginalExtension();
-            $input['berkas_ktp']->storeAs('public/images', $berkas_ktp);
+            $input['berkas_ktp']->storeAs('berkas-peserta', $berkas_ktp);
         } else {
             $berkas_ktp = '';
         }
 
         if (isset($input['berkas_kk'])) {
             $berkas_kk = uniqid() . time() . '.' . $input['berkas_kk']->getClientOriginalExtension();
-            $input['berkas_kk']->storeAs('public/images', $berkas_kk);
+            $input['berkas_kk']->storeAs('berkas-peserta', $berkas_kk);
         } else {
             $berkas_kk = '';
         }
 
         if (isset($input['berkas_buku_tabungan'])) {
             $berkas_buku_tabungan = uniqid() . time() . '.' . $input['berkas_buku_tabungan']->getClientOriginalExtension();
-            $input['berkas_buku_tabungan']->storeAs('public/images', $berkas_buku_tabungan);
+            $input['berkas_buku_tabungan']->storeAs('berkas-peserta', $berkas_buku_tabungan);
         } else {
             $berkas_buku_tabungan = '';
         }

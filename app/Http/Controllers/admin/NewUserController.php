@@ -47,7 +47,16 @@ class NewUserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::findOrFail($id);
+        if ($user->jenis_kepesertaan != 'jk') {
+            $user_table = 'wages';
+        } else {
+            $user_table = 'constructions';
+        }
+
+        $data = User::join($user_table, 'users.id', 'user_id')->where('users.id', $id)->first();        
+
+        return view('components.new-user.show', compact(['data']));
     }
 
     /**
@@ -59,14 +68,18 @@ class NewUserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        if($user->jenis_kepesertaan != 'jk'){
+        if ($user->jenis_kepesertaan != 'jk') {
             $user_table = 'wages';
-        } else {        
+        } else {
             $user_table = 'constructions';
         }
-        $data = User::join($user_table, 'users.id', 'user_id')->where('users.id', $id)->where('status',false)->first();
         
-        return view('components.new-user.edit', compact(['data']));
+        $data = User::join($user_table, 'users.id', 'user_id')->where('users.id', $id)->where('status', false)->first();
+
+        if ($data !== null) {
+            return view('components.new-user.edit', compact(['data']));
+        }
+        return abort(403);
     }
 
     /**

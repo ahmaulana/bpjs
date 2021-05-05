@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Kartu Peserta</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+        .overflow-hidden {
+            overflow: hidden;
+        }
+
+        .h-screen {
+            height: 100vh;
+        }
+
+        .justify-center {
+            justify-content: center;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        body {
+            font-family: inherit;
+            line-height: inherit;
+        }
+
+        .shadow-lg {
+            --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+        }
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .py-4 {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+
+        .my-20 {
+            margin-top: 5rem;
+            margin-bottom: 5rem;
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+
+        .shadow-lg {
+            --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+        }
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .border-2 {
+            border-width: 2px;
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+
+        .border-white {
+            --tw-border-opacity: 1;
+            border-color: rgba(255, 255, 255, var(--tw-border-opacity));
+        }
+    </style>
+</head>
+
+<body class="h-screen overflow-hidden flex items-center justify-center">
+    <div style="background-color: #70AD47; width: 450px;" class="py-4 px-4 shadow-lg rounded-lg my-20">
+        <div style="background-color: #70AD47;" class="px-4 border-2 border-white shadow-lg rounded-lg">
+            <div>
+                <h2 class="text-center text-3xl font-semibold">Kartu Peserta</h2>
+                <h3 class="mt-4 text-2xl font-semibold">{{ $card['name'] }}</h3>
+                <h3 class="text-2xl">{{ $card['number'] }}</h3>
+                <p class="mt-10 text-xl">
+                    11-2008
+                </p>
+            </div>
+            <div class="flex justify-end mt-4">
+                <p class="text-xl font-medium">BPJS</p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
