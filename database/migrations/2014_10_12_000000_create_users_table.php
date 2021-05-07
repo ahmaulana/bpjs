@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->foreignId('current_team_id')->nullable();
             $table->text('profile_photo_path')->nullable();
             $table->string('jenis_kepesertaan');
+            $table->boolean('notification')->default(0);
             $table->boolean('status')->default(0);
             $table->timestamps();
         });

@@ -79,4 +79,19 @@ class User extends Authenticatable
     {
         return $this->hasOne(Construction::class);
     }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function last_invoice()
+    {
+        return $this->invoices()->latest('created_at')->first();
+    }
+
+    public function last_payment()
+    {
+        return $this->invoices()->where('status', true)->latest('created_at')->first();
+    }
 }
