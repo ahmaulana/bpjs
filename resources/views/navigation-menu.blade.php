@@ -66,8 +66,8 @@
                 </a>
             </li>
             <li class="flex-1">
-                <a href="{{ route('update-profile.index') }}" class="block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 {{request()->routeIs('update-profile.index') ? 'border-blue-600' : 'border-gray-800'}}">
-                    <i class="fas fa-users pr-0 md:pr-3"></i><span class="pb-1 md:pb-0 text-xs md:text-base {{request()->routeIs('update-profile.index') ? 'text-white' : 'text-gray-400'}} block md:inline-block">Ubah Data Peserta</span>
+                <a href="{{ route('user.profile.index') }}" class="block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 {{request()->routeIs('user.profile.index') ? 'border-blue-600' : 'border-gray-800'}}">
+                    <i class="fas fa-users pr-0 md:pr-3"></i><span class="pb-1 md:pb-0 text-xs md:text-base {{request()->routeIs('user.profile.index') ? 'text-white' : 'text-gray-400'}} block md:inline-block">Ubah Data Peserta</span>
                 </a>
             </li>
             @endif

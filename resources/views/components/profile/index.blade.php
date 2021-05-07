@@ -6,7 +6,7 @@
     </div>
     <div class="flex">
         <div class="p-4 w-24 min-w-full">
-            
+            @livewire('profile.index')
         </div>
     </div>
 </x-app-layout>

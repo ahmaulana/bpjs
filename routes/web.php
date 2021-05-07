@@ -51,7 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/home', [UserHomeController::class, 'index'])->name('user.home');
         Route::get('/pembayaran-iuran', [PaymentController::class, 'card'])->name('user.payment.card');
         Route::get('/pengajuan-klaim', [ClaimController::class, 'form'])->name('user.claim.form');
-        Route::get('/cek-saldo', [BalanceController::class, 'check'])->name('user.balance.check');        
-        Route::resource('/update-profile', UserHomeController::class);
+        Route::get('/cek-saldo', [BalanceController::class, 'check'])->name('user.balance.check');
+        Route::get('/update-profile', [UserHomeController::class, 'index'])->name('user.profile.index');
     });
 });
