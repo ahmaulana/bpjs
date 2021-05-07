@@ -149,7 +149,7 @@
             <div class="mt-4">
                 <x-jet-label for="total_pekerja" value="{{ __('Total Pekerja') }}" />
                 <x-jet-input wire:model="total_pekerja" id="total_pekerja" class="block mt-1 w-full" type="number" name="total_pekerja" :value="old('total_pekerja')" />
-            </div>            
+            </div>
 
         </div>
 

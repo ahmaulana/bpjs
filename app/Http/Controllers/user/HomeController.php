@@ -16,6 +16,11 @@ class HomeController extends Controller
         return view('components.profile.index', compact(['user','data']));
     }
 
+    public function password()
+    {
+        return view('components.profile.password');
+    }
+
     public function store()
     {
         $update = request()->validate([

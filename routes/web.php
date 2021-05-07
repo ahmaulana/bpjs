@@ -53,5 +53,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/pengajuan-klaim', [ClaimController::class, 'form'])->name('user.claim.form');
         Route::get('/cek-saldo', [BalanceController::class, 'check'])->name('user.balance.check');
         Route::get('/update-profile', [UserHomeController::class, 'index'])->name('user.profile.index');
+        Route::get('/update-password', [UserHomeController::class, 'password'])->name('user.profile.password');
     });
 });
