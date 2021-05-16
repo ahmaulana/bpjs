@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
@@ -30,7 +31,7 @@ class User extends Authenticatable
         'email',
         'password',
         'jenis_kelamin',
-        'no_hp',              
+        'no_hp',
         'program',
         'jenis_kepesertaan',
         'kantor_cabang',
@@ -85,6 +86,14 @@ class User extends Authenticatable
         return $this->hasMany(Invoice::class);
     }
 
+    public function latest_invoice()
+    {
+        return $this->invoices()
+            ->whereIn('id', function ($q) {
+                $q->select(DB::raw('MAX(id) FROM invoices GROUP BY user_id'));
+            });
+    }
+
     public function last_invoice()
     {
         return $this->invoices()->latest('created_at')->first();
@@ -93,5 +102,26 @@ class User extends Authenticatable
     public function last_payment()
     {
         return $this->invoices()->where('status', true)->latest('created_at')->first();
+    }
+
+    public function scopeSelectLastInvoice($query, $alias)
+    {
+        dd($query);
+        $query->addSelect([
+            $alias => Invoice::selectRaw('GROUP_CONCAT("Rp.",FORMAT(tagihan,2))')
+                ->leftJoin('users', 'user_id', 'users.id')
+                ->whereColumn('user_id', 'users.id')
+        ]);
+    }
+
+    public function scopeHasPaid($query, $alias)
+    {
+        $query->addSelect([
+            $alias => Invoice::selectRaw('IF(invoices.status, "Terbayar", "Belum Terbayar")')
+                ->leftJoin('users', 'users.id', 'user_id')
+                ->whereColumn('invoices.user_id', 'users.id')
+                ->latest('invoices.created_at')
+                ->limit(1)
+        ]);
     }
 }

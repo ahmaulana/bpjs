@@ -14,6 +14,7 @@ class CreateInvoicesTable extends Migration
     public function up()
     {
         Schema::create('invoices', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('user_id');
             $table->integer('tagihan');
             $table->integer('denda')->default(0);

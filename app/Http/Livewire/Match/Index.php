@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\NewUser;
+namespace App\Http\Livewire\Match;
 
 use App\Models\Construction;
 use App\Models\User;
@@ -76,11 +76,8 @@ class Index extends LivewireDatatable
                 })
                     ->label('Program'),
 
-                BooleanColumn::name('status')
-                    ->label('Verifikasi'),
-
                 Column::callback(['id', 'status'], function ($id, $status) {
-                    return view('user-table-actions', ['id' => $id, 'status' => $status]);
+                    return view('match-table-actions', ['id' => $id, 'status' => $status]);
                 })
                     ->label('Aksi')
                     ->alignCenter(),
@@ -140,11 +137,8 @@ class Index extends LivewireDatatable
                 })
                     ->label('Program'),
 
-                BooleanColumn::name('status')
-                    ->label('Verifikasi'),
-
                 Column::callback(['id', 'status'], function ($id, $status) {
-                    return view('user-table-actions', ['id' => $id, 'status' => $status]);
+                    return view('match-table-actions', ['id' => $id, 'status' => $status]);
                 })
                     ->label('Aksi')
                     ->alignCenter(),

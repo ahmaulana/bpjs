@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
 
     @livewireStyles
+    @stack('styles')
 
     <!-- Scripts -->
     <script src="{{ mix('js/app.js') }}" defer></script>

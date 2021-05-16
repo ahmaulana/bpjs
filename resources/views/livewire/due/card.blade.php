@@ -1,19 +1,20 @@
+@prepend('styles')
+<style>
+    /* CHECKBOX TOGGLE SWITCH */
+    /* @apply rules for documentation, these do not work as inline style */
+    .toggle-checkbox:checked {
+        @apply: right-0 border-green-400;
+        right: 0;
+        border-color: #68D391;
+    }
+
+    .toggle-checkbox:checked+.toggle-label {
+        @apply: bg-green-400;
+        background-color: #68D391;
+    }
+</style>
+@endprepend
 <div>
-    <style>
-        /* CHECKBOX TOGGLE SWITCH */
-        /* @apply rules for documentation, these do not work as inline style */
-        .toggle-checkbox:checked {
-            @apply: right-0 border-green-400;
-            right: 0;
-            border-color: #68D391;
-        }
-
-        .toggle-checkbox:checked+.toggle-label {
-            @apply: bg-green-400;
-            background-color: #68D391;
-        }
-    </style>
-
     <div>
         <label for="toggle" class="text-sm font-bold">Notifikasi</label>
         <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
@@ -65,7 +66,7 @@
                             <p>Rp.{{ number_format($tagihan,2,',','.') }}</p>
                         </div>
                         <div class="flex my-2">
-                            <p>Rp.{{ number_format($denda,2,',','.') }}</p>                            
+                            <p>Rp.{{ number_format($denda,2,',','.') }}</p>
                         </div>
                     </div>
                 </div>

@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\Payment;
+namespace App\Http\Livewire\Due;
 
 use App\Models\Construction;
 use App\Models\Invoice;
 use App\Models\User;
 use App\Models\Wage;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class Card extends Component
@@ -93,7 +92,7 @@ class Card extends Component
 
     public function render()
     {
-        return view('livewire.payment.card');
+        return view('livewire.due.card');
     }
 
     public function update_notification()
