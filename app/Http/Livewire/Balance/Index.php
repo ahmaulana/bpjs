@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\Due;
+namespace App\Http\Livewire\Balance;
 
 use App\Models\Construction;
 use App\Models\Invoice;
 use App\Models\User;
 use App\Models\Wage;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Request;
 use Mediconesystems\LivewireDatatables\BooleanColumn;
 use Mediconesystems\LivewireDatatables\Column;
@@ -42,8 +43,8 @@ class Index extends LivewireDatatable
                 Column::name('constructions.nama_proyek')
                     ->label('Nama Proyek'),
 
-                Column::name('name')
-                    ->label('Nama Pengguna'),
+                Column::name('constructions.nama_pemilik')
+                    ->label('Nama Pemilik'),
 
                 Column::callback(['program'], function ($prog) {
                     switch ($prog) {
@@ -70,17 +71,25 @@ class Index extends LivewireDatatable
                 })
                     ->label('Program'),
 
-                Column::name('latest_invoice.tagihan')
-                    ->label('Total Iuran'),
-
-                BooleanColumn::callback(['id'], function ($id) {
-                    $invoice = Invoice::where('user_id', $id)->latest('created_at')->first();
-                    if (isset($invoice->status)) {
-                        return ($invoice->status) ? 'Terbayar' : 'Belum Terbayar';
-                    }
-                    return 'Belum Terbayar';
+                Column::callback(['status', 'id'], function ($status, $id) {
+                    $invoice = Invoice::where('user_id', $id)->where('status', true)->sum('tagihan');
+                    return $invoice;
                 })
-                    ->label('Status Iuran')
+                    ->label('Saldo Terakhir')
+                    ->alignCenter(),
+
+                Column::callback(['id', 'name'], function ($id) {
+                    $invoice = Invoice::where('user_id', $id)->where('status', true)->latest('created_at')->first();
+                    return $invoice->tagihan;
+                })
+                    ->label('Iuran Terakhir')
+                    ->alignCenter(),
+
+                Column::callback(['name', 'id'], function ($name, $id) {
+                    $invoice = Invoice::where('user_id', $id)->latest('created_at')->first();
+                    return Carbon::parse($invoice->created_at)->isoFormat('D MMMM Y');
+                })
+                    ->label('Pembayaran Iuran Terakhir')
                     ->alignCenter(),
 
                 Column::callback(['id', 'status'], function ($id, $status) {
@@ -96,15 +105,16 @@ class Index extends LivewireDatatable
                 Column::name('id')
                     ->label('ID'),
 
-                Column::name('wages.lokasi_bekerja')
-                    ->label('Lokasi Bekerja'),
-
                 Column::name('wages.no_kpj')
                     ->label('No KPJ')
                     ->searchable(),
 
-                Column::name('name')
-                    ->label('Nama Tenaga Kerja'),
+                Column::name('users.name')
+                    ->label('Nama')
+                    ->searchable(),
+
+                Column::name('wages.lokasi_bekerja')
+                    ->label('Lokasi Bekerja'),
 
                 Column::callback(['program'], function ($prog) {
                     switch ($prog) {
@@ -131,14 +141,28 @@ class Index extends LivewireDatatable
                 })
                     ->label('Program'),
 
-                Column::name('latest_invoice.tagihan')
-                    ->label('Total Iuran'),
-
-                Column::callback(['id'], function ($id) {
-                    $invoice = Invoice::where('user_id', $id)->latest('created_at')->first();
-                    return ($invoice->status) ? 'Terbayar' : 'Belum Terbayar';
+                Column::callback(['status', 'id'], function ($status, $id) {
+                    $invoice = Invoice::where('user_id', $id)->where('status', true)->sum('tagihan');
+                    return $invoice;
                 })
-                    ->label('Status Iuran')
+                    ->label('Saldo Terakhir')
+                    ->alignCenter(),
+
+                Column::name('wages.penghasilan')
+                    ->label('Upah Terakhir'),
+
+                Column::callback(['id', 'name'], function ($id) {
+                    $invoice = Invoice::where('user_id', $id)->where('status', true)->latest('created_at')->first();
+                    return $invoice->tagihan;
+                })
+                    ->label('Iuran Terakhir')
+                    ->alignCenter(),
+
+                Column::callback(['name', 'id'], function ($name, $id) {
+                    $invoice = Invoice::where('user_id', $id)->latest('created_at')->first();
+                    return Carbon::parse($invoice->created_at)->isoFormat('D MMMM Y');
+                })
+                    ->label('Pembayaran Iuran Terakhir')
                     ->alignCenter(),
 
                 Column::callback(['id', 'status'], function ($id, $status) {
@@ -178,6 +202,8 @@ class Index extends LivewireDatatable
                 break;
         }
 
+        //Balance
+        $balance = Invoice::where('user_id', $user->id)->where('status', true)->sum('tagihan');
         //Total Iuran
         $due = Invoice::where('user_id', $user->id)->latest('created_at')->first();
 
@@ -185,17 +211,19 @@ class Index extends LivewireDatatable
             // Nomor KPJ            
             $data = Wage::where('user_id', $user->id)->first();
 
-            $card = new TemplateProcessor(storage_path('app/templates/iuran-upah.docx'));
+            $card = new TemplateProcessor(storage_path('app/templates/saldo-upah.docx'));
             $card->setValues([
-                'lokasi_bekerja' => $data->lokasi_bekerja,
                 'no_kpj' => $data->no_kpj,
                 'nama' => $user->name,
+                'lokasi_bekerja' => $data->lokasi_bekerja,
                 'program' => $program,
-                'total_iuran' => "Rp." . number_format($due->tagihan, 2, ',', '.'),
-                'status' => ($due->status) ? 'Terbayar' : 'Belum Terbayar',
+                'saldo' => "Rp." . number_format($balance, 2, ',', '.'),
+                'penghasilan' => "Rp." . number_format($data->penghasilan, 2, ',', '.'),
+                'iuran' => "Rp." . number_format($due->tagihan, 2, ',', '.'),
+                'tgl' => Carbon::parse($due->created_at)->isoFormat('D MMMM Y'),
             ]);
 
-            $file_name = 'Data Iuran ' . $data->no_kpj . '.docx';
+            $file_name = 'Data Saldo ' . $data->no_kpj . '.docx';
             $card->saveAs($file_name);
 
             return response()->download(public_path($file_name))->deleteFileAfterSend();
@@ -203,17 +231,18 @@ class Index extends LivewireDatatable
             // Nomor NPP
             $data = Construction::where('user_id', $user->id)->first();
 
-            $card = new TemplateProcessor(storage_path('app/templates/iuran-jk.docx'));
+            $card = new TemplateProcessor(storage_path('app/templates/saldo-jk.docx'));
             $card->setValues([
                 'npp' => $data->npp,
+                'nama_pemilik' => $data->nama_pemilik,
                 'nama_proyek' => $data->nama_proyek,
-                'nama' => $user->name,
                 'program' => $program,
-                'total_iuran' => "Rp." . number_format($due->tagihan, 2, ',', '.'),
-                'status' => ($due->status) ? 'Terbayar' : 'Belum Terbayar',
+                'saldo' => "Rp." . number_format($balance, 2, ',', '.'),
+                'iuran' => "Rp." . number_format($due->tagihan, 2, ',', '.'),
+                'tgl' => Carbon::parse($due->created_at)->isoFormat('D MMMM Y'),
             ]);
 
-            $file_name = 'Data Iuran ' . $data->npp . '.docx';
+            $file_name = 'Data Saldo ' . $data->npp . '.docx';
             $card->saveAs($file_name);
 
             return response()->download(public_path($file_name))->deleteFileAfterSend();

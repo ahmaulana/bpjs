@@ -108,5 +108,6 @@ class Card extends Component
         Invoice::where('user_id', auth()->user()->id)->where('status', false)->update(array('status' => true));
         $this->invoice_notification = false;
         $this->tagihan = 0;
+        $this->denda = 0;
     }
 }

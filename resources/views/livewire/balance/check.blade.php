@@ -39,7 +39,7 @@
                     Saldo Terakhir
                 </dt>
                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    Rp.{{ number_format(10000, 2, ',', '.') }}
+                    Rp.{{ number_format($balance, 2, ',', '.') }}
                 </dd>
             </div>
             <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">

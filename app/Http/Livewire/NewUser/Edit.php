@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\NewUser;
 
+use App\Models\Invoice;
 use App\Models\User;
 use App\Models\Wage;
 use Carbon\Carbon;
@@ -21,7 +22,7 @@ class Edit extends Component
     protected $messages;
 
     public function mount()
-    {                
+    {
         $this->user_id = $this->data->user_id;
         $this->jenis_kepesertaan = $this->data->jenis_kepesertaan;
         $this->nik = $this->data->nik;
@@ -63,12 +64,36 @@ class Edit extends Component
 
     public function download($file, $name)
     {
-        $path = storage_path('app/public/images/' . $file);
+        $path = storage_path('app/berkas-peserta/' . $file);
         return response()->download($path, $name);
     }
 
     public function update()
     {
+        $user = User::findOrFail($this->user_id);
+
+        // Program
+        switch ($user->program) {
+            case 'jkk jkm jht':
+                $persentase = 0.54 + 0.3 + 5.7;
+                break;
+            case 'jkk jkm jp':
+                $persentase = 0.54 + 0.3 + 3;
+                break;
+            case 'jkk jht':
+                $persentase = 0.54 + 5.7;
+                break;
+            case 'jkk jkm':
+                $persentase = $persentase = 0.54 + 0.3;
+                break;
+            case 'jkm':
+                $persentase = 0.3;
+                break;
+            case 'jkk':
+                $persentase = 0.54;
+                break;
+        }
+
         if ($this->jenis_kepesertaan != 'jk') {
             $this->rules = [
                 'nik' => ['required', 'numeric', 'digits:16', 'unique:wages,nik,' . $this->data->id],
@@ -102,9 +127,8 @@ class Edit extends Component
             ];
             $update = $this->validate();
 
-            DB::transaction(function () use ($update) {
+            DB::transaction(function () use ($user, $persentase, $update) {
                 //Update Users Table                
-                $user = User::findOrFail($this->user_id);
                 $user->name = $update['name'];
                 $user->no_hp = $update['no_hp'];
                 $user->jenis_kelamin = $update['jenis_kelamin'];
@@ -128,6 +152,15 @@ class Edit extends Component
                     'jam_kerja' => $update['jam_kerja'],
                     'penghasilan' => $update['penghasilan'],
                     'periode_pembayaran' => $update['periode_pembayaran'],
+                ]);
+
+                //Invoice
+                $tagihan = $update['penghasilan'] * $persentase / 100;
+
+                Invoice::create([
+                    'user_id' => $user->id,
+                    'tagihan' => $tagihan,
+                    'status' => true,
                 ]);
             });
             return redirect(route('peserta-baru.index'));
@@ -171,7 +204,7 @@ class Edit extends Component
             ];
             $update = $this->validate();
 
-            DB::transaction(function () use ($update) {
+            DB::transaction(function () use ($persentase, $update) {
                 //Update Users Table
                 $user = User::findOrFail($this->user_id);
                 $user->name = $update['name'];
@@ -196,6 +229,14 @@ class Edit extends Component
                     'masa_pemeliharaan' => Carbon::now()->addYears($update['masa_kontrak']),
                     'total_pekerja' => $update['total_pekerja'],
                     'cara_pembayaran' => $update['cara_pembayaran'],
+                ]);
+
+                //Invoice
+                $tagihan = $update['pernghasilan'] * $persentase / 100;
+
+                Invoice::create([
+                    'user_id' => $user->id,
+                    'tagihan' => $tagihan,
                 ]);
             });
             return redirect(route('peserta-baru.index') . '?user=jasa-konstruksi');

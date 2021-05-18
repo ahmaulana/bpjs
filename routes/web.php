@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect(route('login'));
 });
 
 Route::get('/redirect', function () {
@@ -31,7 +31,7 @@ Route::get('/redirect', function () {
     if (User::findOrFail(auth()->user()->id)->hasRole(['Admin', 'admin'])) {
         return redirect()->route('admin.home');
     } else {
-        return redirect()->route('user.home');
+        return redirect()->route('user.due.card');
     }
 })->name('redirect');
 
@@ -46,8 +46,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/home', [HomeController::class, 'index'])->name('admin.home');
 
         Route::resource('peserta-baru', NewUserController::class);
-        Route::resource('klaim', ClaimController::class);
         Route::resource('iuran', DueController::class);
+        Route::resource('klaim', ClaimController::class);
+        Route::resource('saldo', BalanceController::class);
         Route::resource('pemadanan', MatchController::class);
         Route::resource('rekap', RecapLetter::class);
     });
