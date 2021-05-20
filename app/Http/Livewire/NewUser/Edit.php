@@ -232,7 +232,7 @@ class Edit extends Component
                 ]);
 
                 //Invoice
-                $tagihan = $update['penghasilan'] * $persentase / 100;
+                $tagihan = $update['nilai_proyek'] * $persentase / 100;
 
                 Invoice::create([
                     'user_id' => $user->id,
