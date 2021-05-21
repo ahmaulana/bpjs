@@ -41,6 +41,7 @@
             <div class="mt-4">
                 <x-jet-label for="jenis_pemilik" value="{{ __('Jenis Pemilik') }}" />
                 <select wire:model="jenis_pemilik" name="jenis_pemilik" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full">
+                    <option value="">Pilih jenis pemilik...</option>
                     <option value="perusahaan">Perusahaan</option>
                     <option value="instansi">Instansi</option>
                 </select>
@@ -49,13 +50,14 @@
 
             <div class="mt-4">
                 <x-jet-label for="nama_pemilik" value="{{ __('Nama Pemilik') }}" />
-                <x-jet-input wire:model="nama_pemilik" id="nama_pemilik" class="block mt-1 w-full" type="number" name="nama_pemilik" />
+                <x-jet-input wire:model="nama_pemilik" id="nama_pemilik" class="block mt-1 w-full" type="text" name="nama_pemilik" />
                 @error('nama_pemilik') <span class="error text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div class="mt-4">
                 <x-jet-label for="program" value="{{ __('Program') }}" />
                 <select wire:model="program" name="program" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full">
+                    <option value="">Pilih program...</option>
                     <option value="jkk jkm">Jaminan Kecelakaan Kerja (JKK) dan Jaminan Kematian (JKM)</option>
                     <option value="jkm">Jaminan Kematian (JKM)</option>
                     <option value="jkk">Jaminan Kecelakaan Kerja (JKK)</option>
