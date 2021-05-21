@@ -159,13 +159,12 @@ class Index extends LivewireDatatable
     public function delete($id)
     {
         $data = Claim::findOrFail($id);
-        if (!$data->status) {
-            if ($data->jenis_kepesertaan != 'jk') {
-                $data->delete();
-            } else {
-                $data->delete();
-                return redirect(route('klaim.index') . '?user=jasa-konstruksi');
-            }
+
+        if ($data->jenis_kepesertaan != 'jk') {
+            $data->delete();
+        } else {
+            $data->delete();
+            return redirect(route('klaim.index') . '?user=jasa-konstruksi');
         }
     }
 

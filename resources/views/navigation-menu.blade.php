@@ -1,6 +1,6 @@
-<div style="background-color: #009e0f;" class="h-16 fixed bottom-0 mt-12 md:relative md:h-screen z-10 w-full md:w-52">
+<div style="background-color: #009e0f;" class="h-16 fixed bottom-0 mt-12 md:relative md:h-screen z-10 w-full md:w-72">
 
-    <div class="md:mt-16 md:w-52 md:fixed md:left-0 md:top-0 content-center md:content-start text-left justify-between">
+    <div class="md:mt-16 md:w-72 md:fixed md:left-0 md:top-0 content-center md:content-start text-left justify-between">
         <ul class="list-reset flex flex-row md:flex-col py-0 md:py-3 px-1 md:px-2 text-center md:text-left">
 
             @if(auth()->user()->hasRole(['admin','Admin']))
@@ -33,7 +33,7 @@
             <li class="flex-1">
                 <div @click.away="open_new_user = false" class="relative" x-data="{ open_new_user: false }">
                     <a href="#" @click="open_new_user = !open_new_user" class="block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 {{request()->routeIs('iuran.*') ? 'border-blue-600' : 'border-gray-400'}}">
-                        <i class="fas fa-money-bill pr-0 md:pr-3 w-8"></i><span class="pb-1 md:pb-0 text-xs md:text-base {{request()->routeIs('iuran.*') ? 'text-white' : 'text-gray-300'}} block md:inline-block">Data Iuran</span>
+                        <i class="fas fa-money-bill pr-0 md:pr-3 w-8"></i><span class="pb-1 md:pb-0 text-xs md:text-base {{request()->routeIs('iuran.*') ? 'text-white' : 'text-gray-300'}} block md:inline-block">Data Pembayaran Iuran</span>
                         <div class="hidden md:inline-block">
                             <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open_new_user, 'rotate-0': !open_new_user}" class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1">
                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
@@ -52,7 +52,7 @@
             <li class="flex-1">
                 <div @click.away="open_new_user = false" class="relative" x-data="{ open_new_user: false }">
                     <a href="#" @click="open_new_user = !open_new_user" class="block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 {{request()->routeIs('klaim.*') ? 'border-blue-600' : 'border-gray-400'}}">
-                        <i class="fas fa-clipboard-check pr-0 md:pr-3 w-8"></i><span class="pb-1 md:pb-0 text-xs md:text-base {{request()->routeIs('klaim.*') ? 'text-white' : 'text-gray-300'}} block md:inline-block">Verifikasi Klaim</span>
+                        <i class="fas fa-clipboard-check pr-0 md:pr-3 w-8"></i><span class="pb-1 md:pb-0 text-xs md:text-base {{request()->routeIs('klaim.*') ? 'text-white' : 'text-gray-300'}} block md:inline-block">Pengajuan Klaim</span>
                         <div class="hidden md:inline-block">
                             <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open_new_user, 'rotate-0': !open_new_user}" class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1">
                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
@@ -90,7 +90,7 @@
             <li class="flex-1">
                 <div @click.away="open_new_user = false" class="relative" x-data="{ open_new_user: false }">
                     <a href="#" @click="open_new_user = !open_new_user" class="block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 {{request()->routeIs('pemadanan.*') || request()->routeIs('rekap.*') ? 'border-blue-600' : 'border-gray-400'}}">
-                        <i class="fas fa-table pr-0 md:pr-3 w-8"></i><span class="pb-1 md:pb-0 text-xs md:text-base {{request()->routeIs('pemadanan.*') || request()->routeIs('rekap.*') ? 'text-white' : 'text-gray-300'}} block md:inline-block">Pengolahan Data</span>
+                        <i class="fas fa-table pr-0 md:pr-3 w-8"></i><span class="pb-1 md:pb-0 text-xs md:text-base {{request()->routeIs('pemadanan.*') || request()->routeIs('rekap.*') ? 'text-white' : 'text-gray-300'}} block md:inline-block">Pengolahan Data Peserta</span>
                         <div class="hidden md:inline-block">
                             <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open_new_user, 'rotate-0': !open_new_user}" class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1">
                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
@@ -109,6 +109,12 @@
             @endif
 
             @if(auth()->user()->hasRole(['user','User']))
+            <li class="flex-1">
+                <a href="{{ route('user.home') }}" class="block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 {{request()->routeIs('user.home') ? 'border-blue-600' : 'border-gray-400'}}">
+                    <i class="fas fa-tachometer-alt pr-0 md:pr-3 w-8"></i><span class="pb-1 md:pb-0 text-xs md:text-base {{request()->routeIs('user.home') ? 'text-white' : 'text-gray-300'}} block md:inline-block">Dashboard</span>
+                </a>
+            </li>
+
             <li class="flex-1">
                 <a href="{{ route('user.due.card') }}" class="block py-1 md:py-3 pl-1 align-middle text-white no-underline hover:text-white border-b-2 {{request()->routeIs('user.due.card') ? 'border-blue-600' : 'border-gray-400'}}">
                     <i class="fas fa-id-card pr-0 md:pr-3 w-8"></i><span class="pb-1 md:pb-0 text-xs md:text-base {{request()->routeIs('user.due.card') ? 'text-white' : 'text-gray-300'}} block md:inline-block">Pembayaran Iuran</span>

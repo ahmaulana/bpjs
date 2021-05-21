@@ -8,6 +8,14 @@ use App\Models\User;
 
 class HomeController extends Controller
 {
+    public function home()
+    {
+        $user = auth()->user();
+        $data = $user->jenis_kepesertaan != 'jk' ? $user->wage : $user->construction;
+        
+        return view('components.profile.home', compact(['user','data']));
+    }
+
     public function index()
     {        
         $user = auth()->user();

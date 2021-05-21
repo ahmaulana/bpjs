@@ -54,7 +54,8 @@ class NewUserController extends Controller
             $user_table = 'constructions';
         }
 
-        $data = User::join($user_table, 'users.id', 'user_id')->where('users.id', $id)->first();        
+        $data = User::join($user_table, 'users.id', 'user_id')->where('users.id', $id)->first();
+        $data->id = $id;
 
         return view('components.new-user.show', compact(['data']));
     }
@@ -75,6 +76,8 @@ class NewUserController extends Controller
         }
         
         $data = User::join($user_table, 'users.id', 'user_id')->where('users.id', $id)->where('status', false)->first();
+        $data->uid = $data->id;
+        $data->id = $id;
 
         if ($data !== null) {
             return view('components.new-user.edit', compact(['data']));

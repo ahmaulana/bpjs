@@ -213,6 +213,7 @@
             <div class="mt-4">
                 <x-jet-label for="npp" value="{{ __('NPP') }}" />
                 <x-jet-input wire:model="npp" id="npp" class="block mt-1 w-full" type="number" name="npp" :value="old('npp')" />
+                @error('npp') <span class="error text-red-500">{{ $message }}</span> @enderror
             </div>
 
             <div>

@@ -9,6 +9,7 @@ class Wage extends Model
 {
     use HasFactory;    
     protected $guarded = [];
+    protected $hidden = ['id'];
 
     public function user()
     {

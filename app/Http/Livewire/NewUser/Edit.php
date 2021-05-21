@@ -12,7 +12,7 @@ use Livewire\Component;
 class Edit extends Component
 {
     public $data;
-    public $user_id, $jenis_kepesertaan, $nik, $name, $tempat_lahir, $tgl_lahir, $jenis_kelamin, $no_hp, $lokasi_bekerja, $pekerjaan, $jam_kerja, $penghasilan, $program, $periode_pembayaran, $npp;
+    public $uid, $user_id, $jenis_kepesertaan, $nik, $name, $tempat_lahir, $tgl_lahir, $jenis_kelamin, $no_hp, $lokasi_bekerja, $pekerjaan, $jam_kerja, $penghasilan, $program, $periode_pembayaran, $npp;
 
     public $nama_proyek, $alamat_proyek, $nilai_proyek, $sumber_pembiayaan, $jenis_pemilik, $nama_pemilik, $npp_pelaksana, $no_spk, $masa_kontrak, $total_pekerja, $cara_pembayaran;
 
@@ -24,6 +24,7 @@ class Edit extends Component
     public function mount()
     {
         $this->user_id = $this->data->user_id;
+        $this->uid = $this->data->uid;
         $this->jenis_kepesertaan = $this->data->jenis_kepesertaan;
         $this->nik = $this->data->nik;
         $this->name = $this->data->name;
@@ -96,7 +97,7 @@ class Edit extends Component
 
         if ($this->jenis_kepesertaan != 'jk') {
             $this->rules = [
-                'nik' => ['required', 'numeric', 'digits:16', 'unique:wages,nik,' . $this->data->id],
+                'nik' => ['required', 'numeric', 'digits:16', 'unique:wages,nik,' . $this->uid],
                 'name' => ['required'],
                 'jenis_kelamin' => ['required'],
                 'tempat_lahir' => ['required'],
@@ -166,7 +167,7 @@ class Edit extends Component
             return redirect(route('peserta-baru.index'));
         } else {
             $this->rules = [
-                'npp' => ['required', 'numeric', 'digits:6', 'unique:constructions,npp,' . $this->data->id],
+                'npp' => ['required', 'numeric', 'digits:6', 'unique:constructions,npp,' . $this->uid],
                 'name' => ['required'],
                 'jenis_kelamin' => ['required'],
                 'no_hp' => ['required', 'unique:users,no_hp,' . $this->user_id],
@@ -237,6 +238,7 @@ class Edit extends Component
                 Invoice::create([
                     'user_id' => $user->id,
                     'tagihan' => $tagihan,
+                    'status' => true,
                 ]);
             });
             return redirect(route('peserta-baru.index') . '?user=jasa-konstruksi');

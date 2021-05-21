@@ -31,7 +31,7 @@ Route::get('/redirect', function () {
     if (User::findOrFail(auth()->user()->id)->hasRole(['Admin', 'admin'])) {
         return redirect()->route('admin.home');
     } else {
-        return redirect()->route('user.due.card');
+        return redirect()->route('user.home');
     }
 })->name('redirect');
 
@@ -54,7 +54,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::middleware(['user_verified', 'role_or_permission:user'])->group(function () {
-        Route::get('/home', [UserHomeController::class, 'index'])->name('user.home');
+        Route::get('/home', [UserHomeController::class, 'home'])->name('user.home');
         Route::get('/pembayaran-iuran', [DueController::class, 'card'])->name('user.due.card');
         Route::get('/pengajuan-klaim', [ClaimController::class, 'form'])->name('user.claim.form');
         Route::get('/cek-saldo', [BalanceController::class, 'check'])->name('user.balance.check');

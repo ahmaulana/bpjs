@@ -19,7 +19,7 @@ class Index extends LivewireDatatable
 
     public function builder()
     {
-        
+
         $user_table = (Request::has('user')) ? 'constructions' : 'wages';
 
         return User::query()
@@ -157,52 +157,49 @@ class Index extends LivewireDatatable
     public function delete($id)
     {
         $data = User::findOrFail($id);
-        if (!$data->status) {
-            if ($data->jenis_kepesertaan != 'jk') {
-                $data->delete();
-            } else {
-                $data->delete();
-                return redirect(route('peserta-baru.index') . '?user=jasa-konstruksi');
-            }
+
+        if ($data->jenis_kepesertaan != 'jk') {
+            $data->delete();
+        } else {
+            $data->delete();
+            return redirect(route('peserta-baru.index') . '?user=jasa-konstruksi');
         }
     }
 
     public function print($id)
     {
         $data = User::findOrFail($id);
-        if ($data->status) {
-            if ($data->jenis_kepesertaan != 'jk') {
+        if ($data->jenis_kepesertaan != 'jk') {
 
-                // Nomor KPJ
-                $user = Wage::where('user_id', $data->id)->first();
+            // Nomor KPJ
+            $user = Wage::where('user_id', $data->id)->first();
 
-                $card = new TemplateProcessor(storage_path('app/templates/upah.docx'));
-                $card->setValues([
-                    'nama' => $data->name,
-                    'no' => $user->no_kpj,
-                    'tgl' => Carbon::now()->format('m-Y'),
-                ]);
+            $card = new TemplateProcessor(storage_path('app/templates/upah.docx'));
+            $card->setValues([
+                'nama' => $data->name,
+                'no' => $user->no_kpj,
+                'tgl' => Carbon::parse($user->created_at)->format('m-Y'),
+            ]);
 
-                $file_name = 'Kartu ' . $user->no_kpj . '.docx';
-                $card->saveAs($file_name);
+            $file_name = 'Kartu ' . $user->no_kpj . '.docx';
+            $card->saveAs($file_name);
 
-                return response()->download(public_path($file_name))->deleteFileAfterSend();
-            } else {
-                // Nomor NPP
-                $user = Construction::where('user_id', $data->id)->first();
+            return response()->download(public_path($file_name))->deleteFileAfterSend();
+        } else {
+            // Nomor NPP
+            $user = Construction::where('user_id', $data->id)->first();
 
-                $card = new TemplateProcessor(storage_path('app/templates/jasa-konstruksi.docx'));
-                $card->setValues([
-                    'nama' => $data->name,
-                    'no' => $user->npp_pelaksana,
-                    'alamat' => $user->alamat_proyek,
-                ]);
+            $card = new TemplateProcessor(storage_path('app/templates/jasa-konstruksi.docx'));
+            $card->setValues([
+                'nama' => $data->name,
+                'no' => $user->npp_pelaksana,
+                'alamat' => $user->alamat_proyek,
+            ]);
 
-                $file_name = 'Kartu ' . $user->npp_pelaksana . '.docx';
-                $card->saveAs($file_name);
+            $file_name = 'Kartu ' . $user->npp_pelaksana . '.docx';
+            $card->saveAs($file_name);
 
-                return response()->download(public_path($file_name))->deleteFileAfterSend();
-            }
+            return response()->download(public_path($file_name))->deleteFileAfterSend();
         }
     }
 }

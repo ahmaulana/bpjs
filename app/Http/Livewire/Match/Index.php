@@ -19,12 +19,12 @@ class Index extends LivewireDatatable
 
     public function builder()
     {
-        
+
         $user_table = (Request::has('user')) ? 'constructions' : 'wages';
 
         return User::query()
             ->join($user_table, 'users.id', 'user_id')
-            ->where('users.id', '!=', '1')->orderBy('status', 'ASC')->orderBy('users.id', 'ASC');
+            ->where('users.id', '!=', '1')->where('status', true)->orderBy('status', 'ASC')->orderBy('users.id', 'ASC');
     }
 
     public function columns()
@@ -89,6 +89,9 @@ class Index extends LivewireDatatable
                 Column::name('users.id')
                     ->label('ID'),
 
+                Column::name('wages.no_kpj')
+                    ->label('KPJ'),
+
                 Column::name('wages.nik')
                     ->label('NIK')
                     ->searchable(),
@@ -146,19 +149,6 @@ class Index extends LivewireDatatable
         }
 
         return $columns;
-    }
-
-    public function delete($id)
-    {
-        $data = User::findOrFail($id);
-        if (!$data->status) {
-            if ($data->jenis_kepesertaan != 'jk') {
-                $data->delete();
-            } else {
-                $data->delete();
-                return redirect(route('peserta-baru.index') . '?user=jasa-konstruksi');
-            }
-        }
     }
 
     public function print($id)

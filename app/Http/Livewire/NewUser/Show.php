@@ -11,8 +11,8 @@ class Show extends Component
     public $jenis_kelamin, $program, $tgl_lahir, $status;
 
     public function mount()
-    {                
-        $this->jenis_kelamin = ($this->data->jenis_kelamin) == 'l' ? 'Laki-Laki' : 'Perempuan';        
+    {
+        $this->jenis_kelamin = ($this->data->jenis_kelamin) == 'l' ? 'Laki-Laki' : 'Perempuan';
 
         switch ($this->data->program) {
             case 'jkk jkm jht':
@@ -40,7 +40,7 @@ class Show extends Component
 
         $this->status = ($this->data->status) == true ? 'Aktif' : 'Tidak Aktif';
     }
-
+    
     public function render()
     {
         return view('livewire.new-user.show');
