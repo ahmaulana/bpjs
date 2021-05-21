@@ -238,7 +238,7 @@ Registrasi
                     </div>
 
                     <div class="mt-4">
-                        <x-jet-label for="dokumen_spk" value="{{ __('Dokumen SPK (.jpg atau .png, maksimal 2MB)') }}" />
+                        <x-jet-label for="dokumen_spk" value="{{ __('Dokumen SPK (.pdf, maksimal 2MB)') }}" />
                         <x-jet-input id="dokumen_spk" class="block mt-1 w-full" type="file" name="dokumen_spk" />
                     </div>
 
