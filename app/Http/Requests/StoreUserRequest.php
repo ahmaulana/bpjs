@@ -54,7 +54,7 @@ class StoreUserRequest extends FormRequest
             'nama_pemilik' => ['required_if:jenis_kepesertaan,==,3'],
             'npp_pelaksana' => ['required_if:jenis_kepesertaan,==,3'],
             'no_spk' => ['required_if:jenis_kepesertaan,==,3'],
-            'dokumen_spk' => ['required_if:jenis_kepesertaan,==,3', 'mimes:png', 'max:2048'],
+            'dokumen_spk' => ['required_if:jenis_kepesertaan,==,3', 'mimes:pdf', 'max:2048'],
             'masa_kontrak' => ['required_if:jenis_kepesertaan,==,3'],
             'total_pekerja' => ['required_if:jenis_kepesertaan,==,3'],
             'cara_pembayaran' => ['required_if:jenis_kepesertaan,==,3'],
