@@ -99,7 +99,7 @@ class Index extends LivewireDatatable
                     ->searchable(),
 
                 Column::name('claims.nama')
-                    ->label('Nama Proyek')
+                    ->label('Nama Peserta')
                     ->searchable(),
 
                 Column::name('wage_claims.tempat_lahir')

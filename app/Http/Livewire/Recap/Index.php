@@ -107,4 +107,10 @@ class Index extends LivewireDatatable
 
         return response()->download(public_path($file_name))->deleteFileAfterSend();
     }
+
+    public function delete($id)
+    {
+        $data = RecapLetter::findOrFail($id);
+        $data->delete();
+    }
 }

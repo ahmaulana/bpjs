@@ -54,7 +54,7 @@
             </div>
 
             <div class="mt-4">
-                <x-jet-label for="program" value="{{ __('Jenis Pemilik') }}" />
+                <x-jet-label for="program" value="{{ __('Program') }}" />
                 <select wire:model="program" name="program" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full">
                     <option value="jkk jkm">Jaminan Kecelakaan Kerja (JKK) dan Jaminan Kematian (JKM)</option>
                     <option value="jkm">Jaminan Kematian (JKM)</option>
